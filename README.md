@@ -1,4 +1,4 @@
-# Firefox from RAM Disk
+# Firefox from RAM Disk (macOS only)
 
 ![app logo](./Firefox%20Ramdisk/fframdisk.png)
 
