@@ -226,11 +226,6 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             } else if let app = app {
                 print("Launched app with PID: \(app.processIdentifier)")
                 
-                let firefoxApps = NSRunningApplication.runningApplications(withBundleIdentifier: "org.mozilla.firefox")
-                for app in firefoxApps {
-                    print("Running Firefox app PID: \(app.processIdentifier), bundleID: \(app.bundleIdentifier ?? "none")")
-                }
-                
                 self.terminationObserver = NSWorkspace.shared.notificationCenter.addObserver(
                     forName: NSWorkspace.didTerminateApplicationNotification,
                     object: nil,
