@@ -338,9 +338,8 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     
     func showCompletionNotification() {
         let content = UNMutableNotificationContent()
-        content.title = "Firefox Profile Sync"
-        content.body = "Completed"
-        content.sound = UNNotificationSound(named: UNNotificationSoundName("Purr.aiff"))
+        content.title = "Firefox Ramdisk"
+        content.body = "Profile sync completed."
         
         let request = UNNotificationRequest(
             identifier: UUID().uuidString,
