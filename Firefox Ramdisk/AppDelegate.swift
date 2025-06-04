@@ -253,7 +253,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
     func runBackgroundTask() {
         DispatchQueue.global(qos: .userInitiated).async {
             let fm = FileManager.default
-            
+
             // Create RAM disk if missing
             if !fm.fileExists(atPath: self.mountPoint) {
                 let attach = Process()
@@ -284,17 +284,17 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
                 return
             }
             
-            let totalSize = self.folderSize(atPath: source)
-            
             if fm.fileExists(atPath: self.firefoxProfileDest) {
                 try? fm.removeItem(atPath: self.firefoxProfileDest)
             }
             
-            self.runRsyncWithProgress(from: source, to: self.firefoxProfileDest, totalSize: totalSize)
+            self.runRsyncWithProgress(from: source, to: self.firefoxProfileDest)
         }
     }
     
-    func runRsyncWithProgress(from source: String, to destination: String, totalSize: UInt64) {
+    func runRsyncWithProgress(from source: String, to destination: String) {
+        let totalSize = self.folderSize(atPath: source)
+
         let task = Process()
         task.launchPath = "/usr/bin/rsync"
         task.arguments = ["-a", "--progress", source + "/", destination]
