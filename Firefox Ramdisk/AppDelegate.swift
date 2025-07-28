@@ -362,15 +362,21 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         
         let task = Process()
         task.launchPath = "/usr/bin/rsync"
-        task.arguments = ["-Ha", "--delete", source + "/", destination]
+        task.arguments = ["-Ha", "--delete", "--exclude=saved-telemetry-pings/", source + "/", destination]
         
         let pipe = Pipe()
         task.standardOutput = pipe
         task.standardError = pipe
-        
+
         task.terminationHandler = { proc in
+            // Read all output after process finishes
+            let outputData = pipe.fileHandleForReading.readDataToEndOfFile()
+
             DispatchQueue.main.async {
                 if proc.terminationStatus != 0 {
+                    if let outputString = String(data: outputData, encoding: .utf8) {
+                        print("\(outputString)")
+                    }
                     self.showErrorAndExit("Failed to sync back Firefox profile.")
                 } else {
                     self.showCompletionNotification()
@@ -379,6 +385,11 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
             }
         }
         
-        task.launch()
+        do {
+            try task.run()
+        } catch {
+            print("Failed to start rsync process: \(error)")
+            self.showErrorAndExit("Failed to start rsync.")
+        }
     }
 }
