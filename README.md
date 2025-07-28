@@ -26,10 +26,6 @@ This lightweight app reduces SSD wear by running the Firefox profile from a RAM 
 
 Build and run the app from Xcode.
 
-## TODO
-
-Auto Disable disk caching - firefox settings 
-
 ## License
 
 MIT License

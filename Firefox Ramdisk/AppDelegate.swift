@@ -207,6 +207,13 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         }
     }
     
+    func writeUserJS(withProfile path: String) {
+        FirefoxPrefsWriter.write(to: path, prefs: [
+            "browser.cache.disk.enable": false,
+            "browser.cache.disk.capacity": 0
+        ])
+    }
+
     func launchFirefox(withProfile path: String) {
         let firefoxURL = URL(fileURLWithPath: "/Applications/Firefox.app")
         let config = NSWorkspace.OpenConfiguration()
@@ -328,6 +335,7 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
                     self.showErrorAndExit("Copy failed. Possibly not enough space on RAM disk.")
                 } else {
                     self.updateProgress(to: 100)
+                    self.writeUserJS(withProfile: destination);
                     self.launchFirefox(withProfile: destination)
                 }
             }
@@ -362,7 +370,14 @@ class AppDelegate: NSObject, NSApplicationDelegate, UNUserNotificationCenterDele
         
         let task = Process()
         task.launchPath = "/usr/bin/rsync"
-        task.arguments = ["-Ha", "--delete", "--exclude=saved-telemetry-pings/", source + "/", destination]
+        task.arguments = [
+            "-Ha",
+            "--delete",
+            "--exclude=user.js",
+            "--exclude=saved-telemetry-pings/"
+            , source + "/",
+            destination
+        ]
         
         let pipe = Pipe()
         task.standardOutput = pipe
